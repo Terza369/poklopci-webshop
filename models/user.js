@@ -12,7 +12,7 @@ module.exports = class User {
     }
 
     setToken(resetToken) {
-        return db.execute(`UPDATE users SET resetToken = ?, resetTokenExpiration = ADDTIME(CURRENT_TIMESTAMP(), '1:0:0') WHERE id = ?`,
+        return db.execute(`UPDATE users SET resetToken = ?, resetTokenExpiration = ADDTIME(CURRENT_TIMESTAMP(), '3:0:0') WHERE id = ?`,
             [resetToken, this.id]);
     }
 
@@ -37,7 +37,7 @@ module.exports = class User {
     }
 
     static findByToken(resetToken) {
-        return db.execute('SELECT * FROM users WHERE resetToken = ? AND resetTokenExpiration > CURRENT_TIMESTAMP()', [resetToken])
+        return db.execute(`SELECT * FROM users WHERE resetToken = ? AND resetTokenExpiration > ADDTIME(CURRENT_TIMESTAMP(), '2:0:0')`, [resetToken])
             .then(([[user], metaData]) => {
                 return Object.assign(new User(), user);
             })
