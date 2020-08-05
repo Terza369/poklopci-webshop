@@ -1,0 +1,68 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+
+    <main>
+        <div id="welcome">
+            <div class="centered index-welcome">
+                <h1>Welcome to the shop</h1>
+            </div>
+            <div class="centered">
+                <p>This web application was built by Šimun Terzanović as a practice backend project using Node.js and MySQL.</p>
+                <p>This is not a real webshop and we do not have any real products to sell.</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div id="features">
+                <h3>Implemented features:</h3>
+                <ul>
+                    <li>User authorization</li>
+                    <li>Password encryption</li>
+                    <li>Server-side form validation</li>
+                    <li>Sessions and cookies</li>
+                    <li>CSRF attack protection</li>
+                    <li>SQL injection protection</li>
+                    <li>Generating and sending E-mails</li>
+                    <li>Secure password resetting</li>
+                    <li>File upload and download</li>
+                    <li>PDF invoice generation</li>
+                    <li>Payment</li>
+                </ul>
+            </div>
+            <div id="packagejson">
+                <h3>package.json:</h3>
+                <div id="dependencies">
+                    <ul>
+                        <li>"dependencies": {</li>
+                            <ul>
+                                <li>"bcryptjs": "^2.4.3",</li>
+                                <li>"body-parser": "^1.19.0",</li>
+                                <li>"connect-flash": "^0.1.1",</li>
+                                <li>"csurf": "^1.11.0",</li>
+                                <li>"ejs": "^3.1.2",</li>
+                                <li>"express": "^4.17.1",</li>
+                                <li>"express-mysql-session": "^2.1.4",</li>
+                                <li>"express-session": "^1.17.1",</li>
+                                <li>"express-validator": "^6.6.0",</li>
+                                <li>"multer": "^1.4.2",</li>
+                                <li>"mysql2": "^2.1.0",</li>
+                                <li>"nodemailer": "^6.4.10",</li>
+                                <li>"nodemailer-sendgrid-transport": "^0.2.0",</li>
+                                <li>"pdfkit": "^0.11.0",</li>
+                                <li>"stripe": "^8.80.0"</li>
+<!--                                 <li>"helmet": "^4.0.0",</li>
+                                <li>"compression": "^1.7.4",</li>
+                                <li>"morgan": "^1.10.0",</li> -->
+                            </ul>
+                        <li>}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </main>
+<%- include('../includes/end.ejs') %>

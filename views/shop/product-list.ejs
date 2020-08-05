@@ -1,0 +1,80 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+
+            <main>
+                <% if (products.length > 0) { %>
+                    <div class="grid">
+                        <% for (let product of products) { %>
+                            <article class="card product-item">
+                                <header class="card__header">
+                                    <h1 class="product__title">
+                                        <%= product.title %>
+                                    </h1>
+                                </header>
+                                <div class="card__image">
+                                    <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                                </div>
+                                <div class="card__content">
+                                    <h2 class="product__price">
+                                        €<%= product.price %>
+                                    </h2>
+                                    <p class="product__description">
+                                        <%= product.description %>
+                                    </p>
+                                </div>
+                                <div class="card__actions">
+                                    <a href="/products/<%= product.id %>" class="btn">Details</a>
+                                    <% if(locals.isLoggedIn) { %>
+                                        <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+                                    <% } %>
+                                </div>
+                            </article>
+                            <% } %>
+                    </div>
+                    <section class="pagination">
+
+                        <% if(currentPage > 2) { %>
+                            <a href="/products/?page=0">1</a>
+                            ...
+                        <% } %>
+
+                        <% if(hasPreviousPreviousPage) { %>
+                            <a href="/products/?page=<%= previousPreviousPage %>"><%= previousPreviousPage + 1 %></a>
+                        <% } %>
+
+                        <% if(hasPreviousPage) { %>
+                            <a href="/products/?page=<%= previousPage %>"><%= previousPage + 1 %></a>
+                        <% } %>
+
+                        <a href="/products/?page=<%= currentPage %>" class="active"><%= currentPage + 1 %></a>
+
+                        <% if(hasNextPage) { %>
+                            <a href="/products/?page=<%= nextPage %>"><%= nextPage + 1 %></a>
+                        <% } %>
+
+                        <% if(hasNextNextPage) { %>
+                            <a href="/products/?page=<%= nextNextPage %>"><%= nextNextPage + 1 %></a>
+                        <% } %>
+
+                        <% if(currentPage + 3 <= lastPage && currentPage < 1) { %>
+                            <a href="/products/?page=<%= nextNextPage + 1%>"><%= nextNextPage + 2 %></a>
+                        <% } %>
+
+
+                        <% if(lastPage > 2 && currentPage < lastPage - 2) { %>
+                            ...
+                            <a href="/products/?page=<%= lastPage %>"><%= lastPage + 1 %></a>
+                        <% } %>
+
+                    </section>
+                    <% } else { %>
+                        <div class="centered">
+                            <h1>No Products Found</h1>
+                        </div>
+                    <% } %>
+            </main>
+            <%- include('../includes/end.ejs') %>
