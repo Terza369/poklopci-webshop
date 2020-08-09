@@ -7,7 +7,7 @@ exports.getProducts = (req, res, next) => {
     console.log('GET /admin/products');
 
     Product.fetchAll(req.session.user.id)
-        .then(([products, metaData]) => {
+        .then(products => {
             res.render('admin/products', {
                 pageTitle: 'Products',
                 path: '/admin/products',
@@ -89,7 +89,7 @@ exports.getEditProduct = (req, res, next) => {
 
     if(editMode) {
         Product.findById(req.params.productId)
-            .then(([[product], metaData]) => {
+            .then(product => {
                 res.render('admin/edit-product', {
                     pageTitle: 'Edit: ' + product.title,
                     path: '/admin/edit-product',
@@ -116,7 +116,7 @@ exports.postEditProduct = (req, res, next) => {
         if(errors.isEmpty()) {
             let imageUrl;
             Product.findById(req.body.id)
-                .then(([[product], metaData]) => {
+                .then(product => {
                     if(req.file) {
                         imageUrl = req.file.path;
                         fileHelper.deleteFile(product.imageUrl);
@@ -150,10 +150,9 @@ exports.postEditProduct = (req, res, next) => {
             });
         }
     } else {
-        console.log('Invalid user. Edit denied.');
         res.redirect('/');
+        next(new Error('Invalid user. Edit denied.'));
     }
-
 }
 
 exports.postDeleteProduct = (req, res, next) => {
@@ -161,12 +160,12 @@ exports.postDeleteProduct = (req, res, next) => {
 
     if(req.body.userId == req.session.user.id) {  
         Product.findById(req.body.productId)
-                .then(([[product], metaData]) => {
+                .then(product => {
                     if(product) {
                         fileHelper.deleteFile(product.imageUrl);
                         return Product.deleteById(req.body.productId);
                     } else {
-                        return next(new Error('Product not found'));
+                        throw new Error('Product not found');
                     }
                 })
                 .then(() => {
@@ -175,7 +174,7 @@ exports.postDeleteProduct = (req, res, next) => {
                 })
                 .catch(err => next(err));
     } else {
-        console.log('Invalid user. Edit denied.');
         res.redirect('/');
+        next(new Error('Invalid user. Edit denied.'));
     }
 }

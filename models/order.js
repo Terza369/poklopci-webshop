@@ -15,12 +15,13 @@ module.exports = class Order {
         )
         .then(result => {
             this.id = result[0].insertId;
+            return this;
         })
         .catch(err => console.log(err));
     }
 
     //returns a single order ID for a given user
-    static getOrder(userId) {
+    static getOrderId(userId) {
         return db.execute(
             `SELECT id FROM orders WHERE userId = ?`, [userId]
         )
@@ -31,7 +32,7 @@ module.exports = class Order {
     }
 
     // returns an array of order IDs for a given user
-    static getOrders(userId) {
+    static getOrdersId(userId) {
         return db.execute(
             `SELECT * FROM orders
             WHERE orders.userId = ?`, [userId]

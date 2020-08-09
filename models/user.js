@@ -8,7 +8,12 @@ module.exports = class User {
     
     save() {
         return db.execute('INSERT INTO users (email, password) VALUES (?, ?)',
-            [this.email, this.password]);
+            [this.email, this.password])
+            .then(result => {
+                this.id = result[0].insertId;
+                return this;
+            })
+            .catch(err => console.log(err));
     }
 
     setToken(resetToken) {
@@ -50,7 +55,7 @@ module.exports = class User {
             .then(() => {
                 return db.execute(`UPDATE users SET resetToken = ?, resetTokenExpiration = ? WHERE id = ?`,
                     [null, null, userId]);
-                })
+            })
             .catch(err => console.log(err));
     }
 

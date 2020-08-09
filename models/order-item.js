@@ -18,6 +18,7 @@ module.exports = class OrderItem {
         )
         .then(result => {
             this.id = result[0].insertId;
+            return this;
         })
         .catch(err => console.log(err));
     }
@@ -27,14 +28,17 @@ module.exports = class OrderItem {
         return db.execute(
             `SELECT * FROM orderitems WHERE orderId = ?`, [orderId]
         )
-        .then(([result, metaData]) => {
-            return result;
+        .then(([orderItems, metaData]) => {
+            for(let i = 0; i < orderItems.length; i++) {
+                orderItems[i] = Object.assign(new OrderItem(), orderItems[i]);
+            }
+            return orderItems;
         })
         .catch(err => console.log(err));
     }
 
     //gets order items and related products for a given order
-    static getItemsProducts(orderId) {
+    static getOrderItemsProducts(orderId) {
         return db.execute(
             `SELECT orderitems.*, products.* FROM orderitems
             JOIN products ON products.id = orderitems.productId

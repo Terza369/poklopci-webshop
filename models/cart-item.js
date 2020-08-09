@@ -8,7 +8,14 @@ module.exports = class CartItem {
     }
 
     static fetchAll(cartId) {
-        return db.execute('SELECT * FROM cartitems WHERE cartId = ?', [cartId]);
+        return db.execute('SELECT * FROM cartitems WHERE cartId = ?', [cartId])
+            .then(([cartItems, metaData]) => {
+                for(let i = 0; i < cartItems.length; i++) {
+                    cartItems[i] = Object.assign(new CartItem(), cartItems[i]);
+                }
+                return cartItems;
+            })
+            .catch(err => console.log(err));
     }
 
     static find(productId, cartId) {
@@ -19,13 +26,10 @@ module.exports = class CartItem {
         )
         .then(([[item], metaData]) => {
             if(item) {
-                let cartItem = new CartItem(item.quantity, item.productId, item.cartId);
-                cartItem.id = item.id;
-                return cartItem;
+                return Object.assign(new CartItem(), item);;
             } else {
                 return null;
             }
-
         })
         .catch(err => console.log(err));
     }
@@ -36,7 +40,12 @@ module.exports = class CartItem {
             quantity = ?,
             productId = ?,
             cartId = ?`, [this.quantity, this.productId, this.cartId]
-        );
+        )
+        .then(result => {
+            this.id = result[0].insertId;
+            return this;
+        })
+        .catch(err => console.log(err));
     }
 
     addOne() {

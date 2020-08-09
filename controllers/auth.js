@@ -29,54 +29,47 @@ exports.postLogin = (req, res, next) => {
     console.log('POST /login');
 
     const errors = validationResult(req);
+    let userVar;
 
     if(errors.isEmpty()) {
         User.findByEmail(req.body.email)
             .then((user) => {
                 if(user) {
-                    bcrypt.compare(req.body.password, user.password)
-                        .then((match) => {
-                            if(match) {
-                                req.session.isLoggedIn = true;
-                                req.session.user = user;
-                                req.session.save(err => {
-                                    if(err) {
-                                        console.log(err);
-                                    } else {
-                                        console.log('Login succesful -> ' + user.email)
-                                        res.redirect('/');
-                                    }
-                                });
-                            } else {
-                                console.log('Login failed -> Invalid password');
-                                return res.status(422).render('auth/login', {
-                                    pageTitle: 'Login',
-                                    path: '/login',
-                                    errorMessage: 'Invalid email or password',
-                                    oldInput: { 
-                                        email: req.body.email, 
-                                        password: req.body.password 
-                                    },
-                                    validationErrors: []
-                                });
-                            }
-                        })
-                        .catch(err => next(err));
+                    userVar = user;
+                    return bcrypt.compare(req.body.password, user.password);
                 } else {
-                    console.log('Login failed -> User doen\'t exists');
-                    return res.status(422).render('auth/login', {
-                        pageTitle: 'Login',
-                        path: '/login',
-                        errorMessage: 'Invalid email or password',
-                        oldInput: { 
-                            email: req.body.email, 
-                            password: req.body.password 
-                        },
-                        validationErrors: []
-                    });
+                    throw new Error('User doen\'t exist');
                 }
-            })       
-            .catch(err => next(err));
+            })
+            .then((match) => {
+                if(match) {
+                    req.session.isLoggedIn = true;
+                    req.session.user = userVar;
+                    req.session.save(err => {
+                        if(err) {
+                            console.log(err);
+                        } else {
+                            console.log('Login succesful -> ' + userVar.email)
+                            res.redirect('/');
+                        }
+                    });
+                } else {
+                    throw new Error('Invalid password');
+                }
+            })      
+            .catch(err => {
+                console.log(err);
+                res.status(422).render('auth/login', {
+                    pageTitle: 'Login',
+                    path: '/login',
+                    errorMessage: 'Invalid email or password',
+                    oldInput: { 
+                        email: req.body.email, 
+                        password: req.body.password 
+                    },
+                    validationErrors: []
+                });
+            });
     } else {
         return res.status(422).render('auth/login', {
             pageTitle: 'Login',
@@ -114,9 +107,18 @@ exports.postSignup = (req, res, next) => {
                 const user = new User(req.body.email, hashedPassword);
                 return user.save();
             })
-            .then(() => {
+            .then(user => {
                 console.log('New user created!');
-                res.redirect('/login');
+
+                req.session.isLoggedIn = true;
+                req.session.user = user;
+                req.session.save(err => {
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        console.log('Login succesful -> ' + user.email)
+                    }
+                });
 
                 return transporter.sendMail({
                     to: req.body.email,
@@ -124,7 +126,10 @@ exports.postSignup = (req, res, next) => {
                     subject: 'Signup successfull',
                     html: '<h2>Congratulations! You have successfully signed up.</h2>'
                 })
-                .catch(err => next(err));
+            })
+            .then(result => {
+                console.log('Email status: ' + result.message);
+                res.redirect('/');
             })
             .catch(err => next(err));
     } else {
@@ -172,35 +177,37 @@ exports.postReset = (req, res, next) => {
 
         if(err) {
             console.log(err);
-            return res.redirect('/reset');
-        }
+            res.redirect('/reset');
+        } else {
+            const token = buffer.toString('hex');
 
-        const token = buffer.toString('hex');
-
-        User.findByEmail(req.body.email)
-            .then(user => {
-                if(user) {
-                    return user.setToken(token);
-                } else {
-                    req.flash('error', 'Account not found');
-                    res.redirect('/reset');
-                    return Promise.reject('redirected...');
-                }
-            })
-            .then((result) => {
-                res.redirect('/');
-                return transporter.sendMail({
-                    to: req.body.email,
-                    from: 'simun.terzanovic@gmail.com',
-                    subject: 'Password reset',
-                    html: `
-                        <p>Password reset requested.</p>
-                        <p>Please click this <a href="${req.headers.origin}/reset/${token}">link</a> to reset your password.</p>
-                    `
+            User.findByEmail(req.body.email)
+                .then(user => {
+                    if(user) {
+                        return user.setToken(token);
+                    } else {
+                        req.flash('error', 'Account not found');
+                        res.redirect('/reset');
+                        return Promise.reject('redirected...');
+                    }
+                })
+                .then(() => {
+                    return transporter.sendMail({
+                        to: req.body.email,
+                        from: 'simun.terzanovic@gmail.com',
+                        subject: 'Password reset',
+                        html: `
+                            <p>Password reset requested.</p>
+                            <p>Please click this <a href="${req.headers.origin}/reset/${token}">link</a> to reset your password.</p>
+                        `
+                    })
+                })
+                .then(result => {
+                    console.log('Email status: ' + result.message);
+                    res.redirect('/');
                 })
                 .catch(err => next(err));
-            })
-            .catch(err => next(err));
+        }
     })
 }
 

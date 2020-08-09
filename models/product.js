@@ -1,11 +1,6 @@
 const db = require('../util/database');
 
-
 module.exports = class Product {
-
-    static getItemsPerPage() {
-        return 3;
-    }
 
     constructor(title, imageUrl, price, description, userId) {
         this.title = title;
@@ -17,27 +12,64 @@ module.exports = class Product {
 
     static fetchAll(userId = null) {
         if (userId) {
-            return db.execute('SELECT * FROM products WHERE userId = ?', [userId]);
+            return db.execute('SELECT * FROM products WHERE userId = ?', [userId])
+                .then(([products, metaData]) => {
+                    for(let i = 0; i < products.length; i++) {
+                        products[i] = Object.assign(new Product(), products[i]);
+                    }
+                    return products;
+                })
+                .catch(err => console.log(err));
         } else {
-            return db.execute('SELECT * FROM products');
+            return db.execute('SELECT * FROM products')
+                .then(([products, metaData]) => {
+                    for(let i = 0; i < products.length; i++) {
+                        products[i] = Object.assign(new Product(), products[i]);
+                    }
+                    return products;
+                })
+                .catch(err => console.log(err));
         }
     }
 
     static fetchAllLimited(pageNumber, userId = null) {
         if (userId) {
-            return db.execute('SELECT * FROM products WHERE userId = ? LIMIT ?, ?', [userId, Product.getItemsPerPage() * pageNumber, Product.getItemsPerPage()]);
+            return db.execute('SELECT * FROM products WHERE userId = ? LIMIT ?, ?', [userId, process.env.ITEMS_PER_PAGE * pageNumber, process.env.ITEMS_PER_PAGE])
+                .then(([products, metaData]) => {
+                    for(let i = 0; i < products.length; i++) {
+                        products[i] = Object.assign(new Product(), products[i]);
+                    }
+                    return products;
+                })
+                .catch(err => console.log(err));
         } else {
-            return db.execute('SELECT * FROM products LIMIT ?, ?', [Product.getItemsPerPage() * pageNumber, Product.getItemsPerPage()]);
+            return db.execute('SELECT * FROM products LIMIT ?, ?', [process.env.ITEMS_PER_PAGE * pageNumber, process.env.ITEMS_PER_PAGE])
+                .then(([products, metaData]) => {
+                    for(let i = 0; i < products.length; i++) {
+                        products[i] = Object.assign(new Product(), products[i]);
+                    }
+                    return products;
+                })
+                .catch(err => console.log(err));
         }
     }
 
     static findById(id) {
-        return db.execute('SELECT * FROM products WHERE products.id = ?', [id]);
+        return db.execute('SELECT * FROM products WHERE id = ?', [id])
+            .then(([[product], metaData]) => {
+                return Object.assign(new Product(), product);
+            })
+            .catch(err => console.log(err));
     }
 
     save() {
         return db.execute('INSERT INTO products (title, price, imageUrl, description, userId) VALUES (?, ?, ?, ?, ?)',
-            [this.title, this.price, this.imageUrl, this.description, this.userId]);
+            [this.title, this.price, this.imageUrl, this.description, this.userId])
+            .then(result => {
+                this.id = result[0].insertId;
+                return this;
+            })
+            .catch(err => console.log(err));
     }
 
     update() {
@@ -57,16 +89,16 @@ module.exports = class Product {
     static count(userId = null) {
         if(userId) {
             return db.execute('SELECT COUNT(id) as count FROM products WHERE userId = ?', [userId])
-                .then(([[result], mestaData]) => {
+                .then(([[result], metaData]) => {
                     return result.count;
                 })
-                .catch(err => next(err));
+                .catch(err => console.log(err));
         } else {
             return db.execute('SELECT COUNT(id) as count FROM products')
                 .then(([[result], mestaData]) => {
                     return result.count;
                 })
-                .catch(err => next(err));
+                .catch(err => console.log(err));
         }
     }
 }
