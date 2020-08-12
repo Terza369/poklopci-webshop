@@ -119,11 +119,7 @@ exports.postEditProduct = (req, res, next) => {
                 .then(product => {
                     if(req.file) {
                         imageUrl = req.file.path;
-                        try {
-                            fileHelper.deleteFile(product.imageUrl);
-                        } catch (error) {
-                            console.log(error);
-                        }
+                        fileHelper.deleteFile(product.imageUrl);
                     } else {
                         imageUrl = null;
                     }
