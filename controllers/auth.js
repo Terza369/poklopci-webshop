@@ -29,13 +29,13 @@ exports.postLogin = (req, res, next) => {
     console.log('POST /login');
 
     const errors = validationResult(req);
-    let userVar;
+    let user;
 
     if(errors.isEmpty()) {
         User.findByEmail(req.body.email)
-            .then((user) => {
-                if(user) {
-                    userVar = user;
+            .then((result) => {
+                if(result) {
+                    user = result;
                     return bcrypt.compare(req.body.password, user.password);
                 } else {
                     throw new Error('User doen\'t exist');
@@ -44,12 +44,12 @@ exports.postLogin = (req, res, next) => {
             .then((match) => {
                 if(match) {
                     req.session.isLoggedIn = true;
-                    req.session.user = userVar;
+                    req.session.user = user;
                     req.session.save(err => {
                         if(err) {
                             console.log(err);
                         } else {
-                            console.log('Login succesful -> ' + userVar.email)
+                            console.log('Login succesful -> ' + user.email)
                             res.redirect('/');
                         }
                     });
@@ -217,12 +217,7 @@ exports.getNewPassword = (req, res, next) => {
     User.findByToken(req.params.token)
         .then((user) => {
             if(user) {
-                let message = req.flash('error');
-                if(message.length > 0) {
-                    message = message;
-                } else {
-                    message = null;
-                }
+                let message = req.flash('error').lenght > 0 ? req.flash('error') : null;
             
                 res.render('auth/new-password', {
                     path: '/new-password',

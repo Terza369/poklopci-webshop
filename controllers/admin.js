@@ -114,18 +114,15 @@ exports.postEditProduct = (req, res, next) => {
 
     if(req.body.userId == req.session.user.id) {
         if(errors.isEmpty()) {
-            let imageUrl;
             Product.findById(req.body.id)
                 .then(product => {
-                    if(req.file) {
-                        imageUrl = req.file.path;
+                    const imageUrl = req.file ? req.file.path : null;
+                    if(imageUrl) {
                         fileHelper.deleteFile(product.imageUrl);
-                    } else {
-                        imageUrl = null;
                     }
                     const newProduct = new Product(req.body.title, imageUrl, req.body.price, req.body.description, req.session.user.id);
                     newProduct.id = req.body.id;
-                    return newProduct.update()
+                    return newProduct.update();
                 })
                 .then(() => {
                     console.log('Product ' + req.body.id + ' updated');

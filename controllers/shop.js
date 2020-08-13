@@ -92,9 +92,6 @@ exports.postCartItem = (req, res, next) => {
     Cart.get(req.session.user.id)
         .then(result => {
             cart = result;
-            return;
-        })
-        .then(() => {
             return CartItem.find(req.body.productId, cart.id)
         })
         .then(cartItem => {
@@ -204,9 +201,9 @@ exports.getOrders = (req, res, next) => {
     Order.getOrdersId(req.session.user.id)
         .then(result => {
             let promises = [];
-            for(let id of result) {
+            result.forEach(id => {
                 promises.push(OrderItem.getOrderItemsProducts(id));
-            }
+            });
             return Promise.all(promises)
         })
         .then(orders => {
