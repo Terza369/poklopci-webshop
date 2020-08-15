@@ -24,22 +24,21 @@
                     </a>
                 </li>
             <% } %>
-        </ul>
-        <ul class="main-header__item-list">
+
             <% if(!locals.isLoggedIn) { %>
-            <li class="main-header__item">
-                <a class="<%= path === '/login' ? 'active' : '' %>" href="/login">Login</a>
-            </li>
-            <li class="main-header__item">
-                <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup">Signup</a>
-            </li>
+                <li class="main-header__item-auth">
+                    <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup">Signup</a>
+                </li>
+                <li class="main-header__item-auth">
+                    <a class="<%= path === '/login' ? 'active' : '' %>" href="/login">Login</a>
+                </li>
             <% } else { %>
-            <li class="main-header__item">
-                <form action="/logout" method="POST">
-                    <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
-                    <button class="btn" type="submit">Logout</button>
-                </form>
-            </li>
+                <li class="main-header__item-auth">
+                    <form action="/logout" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+                        <button class="btn" type="submit">Logout</button>
+                    </form>
+                </li>
             <% } %>
         </ul>
     </nav>

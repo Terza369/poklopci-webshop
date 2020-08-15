@@ -1,46 +1,53 @@
 .main-header {
-    width: 100%;
-    height: 3.5rem;
-    background-color: #00695c;
-    padding: 0 1.5rem;
-    display: flex;
-    align-items: center;
-  }
+
+}
   
-  .main-header__nav {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .main-header__item-list {
-    list-style: none;
+.main-header__nav {
+
+}
+
+.main-header__item-list {
+    list-style-type: none;
     margin: 0;
     padding: 0;
-    display: flex;
-  }
-  
-  .main-header__item {
-    margin: 0 1rem;
-    padding: 0;
-  }
-  
-  .main-header__item a,
-  .main-header__item button {
-    font: inherit;
-    background: transparent;
-    border: none;
+    overflow: hidden;
+    background-color: #00695c;
+
+}
+
+.main-header__item {
+    float: left;
+}
+
+.main-header__item-auth {
+    float: right;
+}
+
+.main-header__item a,
+.main-header__item-auth a {
     text-decoration: none;
+    display: block;
     color: white;
-    cursor: pointer;
-  }
-  
-  .main-header__item a:hover,
-  .main-header__item a:active,
-  .main-header__item a.active,
-  .main-header__item button:hover,
-  .main-header__item button:active {
-    color: #ffeb3b;
-  }
+    text-align: center;
+    padding: 15px 26px;
+}
+
+.main-header__item a:hover,
+.main-header__item a:active,
+.main-header__item a.active {
+    background-color:rgb(63, 63, 63);
+}
+
+.main-header__item-auth button {
+    text-decoration: none;
+    display: block;
+    color: white;
+    background-color: #00695c;
+    text-align: center;
+    padding: 14px 26px;
+}
+
+.main-header__item-auth button:hover,
+.main-header__item-auth button:active {
+    background-color:rgb(63, 63, 63);
+}
