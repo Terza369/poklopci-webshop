@@ -7,16 +7,9 @@
     margin-right: 2%;
 }
 
-#packagejson {
-    margin-top: 0rem;
-}
-  
-#packagejson ul{
-    list-style: none;
-}
-
 #features {
-    margin-top: 0.8rem;
+    margin-top: 1.8rem;
+    margin-left: 1.5rem;
 }
 
 #github-icon {
@@ -26,6 +19,7 @@
     left: 48.5%;
     width: 50px;
     height: 50px;
+    margin-top: 3rem;
 }
 
 .icon-wrapper {
