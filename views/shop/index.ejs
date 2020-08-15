@@ -9,23 +9,24 @@
     <%- include('../includes/navigation.ejs') %>
 
     <main>
-        <div id="welcome" class="centered">
-            <div class="index-welcome">
-                <h1>Welcome to the shop</h1>
-            </div>
-            <div>
-                <p>This web application was built by Šimun Terzanović as a practice backend project using Node.js, Express, MySQL and EJS.</p>
-                <p>This is not a real webshop and we do not have any real products to sell.</p>
-                <a href="https://github.com/Terza369/poklopci-webshop" id="github-icon" target="blank">
-                    <div class="icon-wrapper">
-                        <div class="icon pulsing">
-                            <i class="fa fa-github"></i>
-                        </div>
+
+        <div class="index-welcome centered">
+            <h1>Welcome to the shop</h1>
+            <p>This web application was built by Šimun Terzanović as a practice backend project using Node.js, Express, MySQL and EJS.</p>
+            <p>This is not a real webshop and we do not have any real products to sell.</p>
+        </div>
+
+
+        <div class="grid">
+
+            <div class="icon-wrapper">
+                <a href="https://github.com/Terza369/poklopci-webshop" id="github-icon" target="blank" class="centered">
+                    <div class="icon pulsing">
+                        <i class="fa fa-github"></i>
                     </div>
                 </a>
             </div>
-        </div>
-        <div class="grid">
+
             <div id="features">
                 <h3>Implemented features:</h3>
                 <ul>
@@ -42,7 +43,9 @@
                     <li>Payment</li>
                 </ul>
             </div>
+
         </div>
+
         
     </main>
 <%- include('../includes/end.ejs') %>
