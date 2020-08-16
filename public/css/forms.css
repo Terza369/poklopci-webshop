@@ -14,7 +14,7 @@
 .form-control textarea {
   border: 1px solid #a1a1a1;
   font: inherit;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 
 .form-control input:focus,
@@ -26,3 +26,23 @@
 .form-control input.invalid {
   border-color: rgb(231, 0, 0);
 }
+
+.filepicker-input::-webkit-file-upload-button {
+  padding: 5px 6px;
+  background: none;
+  background-color: rgb(240, 240, 240);
+  outline: none;
+  border: none;
+  border-right: 1px solid #999;
+  cursor: pointer;
+}
+
+.filepicker-input::-webkit-file-upload-button:hover {
+  background-color: #00695c;
+  color: white;
+}
+
+.button-wrapper{
+  text-align: center;
+}
+

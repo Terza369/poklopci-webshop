@@ -33,7 +33,7 @@
                     <a class="<%= path === '/login' ? 'active' : '' %>" href="/login">Login</a>
                 </li>
             <% } else { %>
-                <li class="main-header__item-auth">
+                <li class="main-header__item-logout">
                     <form action="/logout" method="POST">
                         <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
                         <button class="btn" type="submit">Logout</button>

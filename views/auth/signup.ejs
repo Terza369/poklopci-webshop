@@ -39,7 +39,9 @@
                     value="<%= locals.oldInput.confirmPassword %>">
             </div>
             <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
-            <button class="btn" type="submit">Signup</button>
+            <div class="button-wrapper">
+                <button class="btn" type="submit">Signup</button>
+            </div>
         </form>
     </main>
 <%- include('../includes/end.ejs') %>
