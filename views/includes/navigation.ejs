@@ -16,12 +16,10 @@
                 </li>
 
                 <li class="main-header__item">
-                    <a class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">Add Product
-                    </a>
+                    <a class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">Add Product</a>
                 </li>
                 <li class="main-header__item">
-                    <a class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">My Products
-                    </a>
+                    <a class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">My Products</a>
                 </li>
             <% } %>
 
@@ -41,5 +39,37 @@
                 </li>
             <% } %>
         </ul>
+    </nav>
+    <nav class="main-header__nav-mobile">
+        <ul class="main-header__item-list-mobile">
+            <li class="dropdown main-header__item-mobile">
+              <a href="#" class="dropbtn">Menu</a>
+              <div class="dropdown-content">
+                <a class="<%= path === '/' ? 'active' : '' %>" href="/">Home</a>
+                <a class="<%= path === '/products' ? 'active' : '' %>" href="/products/?page=0">Products</a>
+                <% if(locals.isLoggedIn) { %>
+                    <a class="<%= path === '/cart' ? 'active' : '' %>" href="/cart">Cart</a>
+                    <a class="<%= path === '/orders' ? 'active' : '' %>" href="/orders">Orders</a>
+                    <a class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product">Add Product</a>
+                    <a class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products">My Products</a>
+                <% } %>
+              </div>
+            </li>
+            <% if(!locals.isLoggedIn) { %>
+                <li class="main-header__item-auth">
+                    <a class="<%= path === '/signup' ? 'active' : '' %>" href="/signup">Signup</a>
+                </li>
+                <li class="main-header__item-auth">
+                    <a class="<%= path === '/login' ? 'active' : '' %>" href="/login">Login</a>
+                </li>
+            <% } else { %>
+                <li class="main-header__item-logout">
+                    <form action="/logout" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+                        <button class="btn" type="submit">Logout</button>
+                    </form>
+                </li>
+            <% } %>
+          </ul>
     </nav>
 </header>

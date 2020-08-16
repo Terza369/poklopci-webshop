@@ -1,10 +1,22 @@
+.main-header__nav-mobile {
+    visibility: hidden;
+    height: 0;
+}
+
+.main-header__item-list-mobile {
+    margin: 0;
+}
+
+.main-header__item-list-mobile .main-header__item-logout {
+    position: absolute;
+}
+
 .main-header__item-list {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #00695c;
-
 }
 
 .main-header__item {
