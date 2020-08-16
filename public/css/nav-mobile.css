@@ -9,7 +9,8 @@
         margin: auto;
     }
 
-    .main-header__item-list-mobile .main-header__item-logout {
+    .main-header__item-list-mobile .main-header__item-logout,
+    .main-header__item-list-mobile .main-header__item-auth {
         position: inherit;
     }
 
@@ -38,12 +39,12 @@
         text-decoration: none;
     }
     
-    .main-header__item-mobile a:hover, .dropdown:hover .dropbtn {
+    .main-header__item-mobile a:hover,
+    .dropdown:hover .dropbtn {
         background-color: rgb(63, 63, 63);
     }
 
-    .main-header__item-mobile a.active,
-    .main-header__item-auth a.active {
+    .main-header__item-mobile a.active {
         background-color:rgb(209, 209, 209);
     }
 
