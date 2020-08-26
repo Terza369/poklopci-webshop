@@ -24,4 +24,4 @@ Click [here](http://poklopciwebshop-env.eba-mputmcmn.eu-central-1.elasticbeansta
 - run `npm start` to run it with Nodemon or `node app.js` for a regular run
 - type in browser: `http://localhost:3000`
 
-However, you will not be able to run it properly due to missing global variables.
+However, you will not be able to run it properly due to missing environment variables.
